@@ -338,6 +338,12 @@ class RecommendedApiThumb extends React.Component {
                                             color='primary'
                                         />
                                     )}
+                                    {(api.gatewayVendor === 'wso2') && (
+                                        <Chip
+                                            label={api.transportType === undefined ? api.type : api.transportType}
+                                            color='primary'
+                                        />
+                                    )}
                                 </Typography>
                             </div>
                         </div>
