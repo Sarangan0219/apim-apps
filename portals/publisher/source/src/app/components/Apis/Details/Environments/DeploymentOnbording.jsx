@@ -81,6 +81,7 @@ export default function DeploymentOnboarding(props) {
         description,
         setDescription,
         gatewayVendor,
+        advertiseInfo,
     } = props;
     const classes1 = useStyles();
     const theme = useTheme();
@@ -103,14 +104,15 @@ export default function DeploymentOnboarding(props) {
      * @return String Solace gateway environment name
      */
     function getSolaceEnvironment(envs) {
-        let solaceEnv = '';
+        const solaceEnv= []
         envs.forEach((env) => {
             if (env.provider === 'solace') {
-                solaceEnv = env.name;
+                solaceEnv.push(env.name);
             }
         });
         return solaceEnv;
     }
+
     /**
      * Get Organization value of external gateways
      * @param {Object} additionalProperties the additionalProperties list
@@ -355,7 +357,8 @@ export default function DeploymentOnboarding(props) {
                                             () => createDeployRevision(selectedEnvironment, selectedVhostDeploy)
                                         }
                                         color='primary'
-                                        disabled={selectedEnvironment.length === 0}
+                                        disabled={selectedEnvironment.length === 0
+                                            || (advertiseInfo && advertiseInfo.advertised)}
                                     >
                                         <FormattedMessage
                                             id='Apis.Details.Environments.Environments.deploy.deploy'

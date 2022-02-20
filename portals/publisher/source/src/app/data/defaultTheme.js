@@ -132,7 +132,7 @@ export default {
         leftMenuTextStyle: 'capitalize',
         leftMenuAnalytics: {
             enable: true, // If `false`, External link to choreo cloud analytics icon will be removed/hidden in nav bar
-            link: 'http://analytics.choreo.dev/setup',
+            link: 'https://console.choreo.dev/',
         },
         resourceChipColors: { // https://github.com/swagger-api/swagger-ui/blob/master/src/style/_variables.scss#L45-L52
             get: '#61affe',
@@ -151,6 +151,11 @@ export default {
             query: '#b3e6fe',
             mutation: '#c1dea0',
             subscription: '#ffcc80',
+        },
+        policyFlowChipColor: {
+            request: '#b3e6fe',
+            response: '#c1dea0',
+            fault: '#fcacb6',
         },
         overviewStepper: {
             backgrounds: {
@@ -244,6 +249,7 @@ export default {
                 streamingApiIcon: '/site/public/images/landing-icons/streamingapi.svg',
                 serviceCatalogApiIcon: '/site/public/images/landing-icons/servicecatalogapi.svg',
                 scopesAddIcon: '/site/public/images/landing-icons/scopes.svg',
+                commonPolicyAddIcon: '/site/public/images/landing-icons/scopes.svg',
                 apiproductAddIcon: '/site/public/images/landing-icons/apiproduct.svg',
             },
             menu: {

@@ -19,8 +19,7 @@
 import React from 'react';
 import Notification from 'rc-notification';
 import Themes from 'Themes';
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Message from './Message';
 
 const theme = createMuiTheme(Themes.light);

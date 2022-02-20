@@ -19,8 +19,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import ResourceNotFound from 'AppComponents/Base/Errors/ResourceNotFound';
 import User from 'AppData/User';

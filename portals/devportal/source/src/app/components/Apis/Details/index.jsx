@@ -45,7 +45,6 @@ import Progress from '../../Shared/Progress';
 import Wizard from './Credentials/Wizard/Wizard';
 import User from '../../../data/User';
 
-
 const ApiConsole = lazy(() => import('./ApiConsole/ApiConsole' /* webpackChunkName: "APIConsole" */));
 const GraphQLConsole = lazy(() => import('./GraphQLConsole/GraphQLConsole' /* webpackChunkName: "GraphQLConsole" */));
 const AsyncApiConsole = lazy(() => import('./AsyncApiConsole/AsyncApiConsole'));
@@ -60,13 +59,13 @@ const LoadableSwitch = withRouter((props) => {
     const { match, api } = props;
     const { apiUuid } = match.params;
     const path = '/apis/';
-    const { advertised } = api.advertiseInfo;
     const redirectURL = path + apiUuid + '/overview';
 
     let tryoutRoute;
     if (api.type === 'GRAPHQL') {
         tryoutRoute = <Route path='/apis/:apiUuid/test' component={GraphQLConsole} />;
-    } else if (api.type === CONSTANTS.API_TYPES.WS || api.type === CONSTANTS.API_TYPES.WEBSUB || api.type === CONSTANTS.API_TYPES.SSE) {
+    } else if (api.type === CONSTANTS.API_TYPES.WS || api.type === CONSTANTS.API_TYPES.WEBSUB
+        || api.type === CONSTANTS.API_TYPES.SSE || api.type === CONSTANTS.API_TYPES.ASYNC) {
         tryoutRoute = <Route path='/apis/:apiUuid/test' component={AsyncApiConsole} />;
     } else {
         tryoutRoute = <Route path='/apis/:apiUuid/test' component={ApiConsole} />;
@@ -81,10 +80,10 @@ const LoadableSwitch = withRouter((props) => {
                 <Route path='/apis/:apiUuid/definition' component={AsyncApiDefinition} />
                 <Route path='/apis/:apiUuid/solaceTopicsInfo' component={SolaceTopicsInfo} />
                 <Route exact path='/apis/:apiUuid/credentials/wizard' component={Wizard} />
-                {!advertised && <Route path='/apis/:apiUuid/comments' component={Comments} />}
-                {!advertised && <Route path='/apis/:apiUuid/credentials' component={Credentials} />}
-                {!advertised && tryoutRoute}
-                {!advertised && <Route path='/apis/:apiUuid/sdk' component={Sdk} />}
+                <Route path='/apis/:apiUuid/comments' component={Comments} />
+                <Route path='/apis/:apiUuid/credentials' component={Credentials} />
+                {tryoutRoute}
+                <Route path='/apis/:apiUuid/sdk' component={Sdk} />
                 <Route component={ResourceNotFound} />
             </Switch>
         </Suspense>
@@ -309,7 +308,6 @@ class Details extends React.Component {
             }
         };
 
-
         this.state = {
             active: 'overview',
             overviewHiden: false,
@@ -346,7 +344,6 @@ class Details extends React.Component {
             this.updateSubscriptionData();
         }
     }
-
 
     /**
      * @param {JSON} api api object
@@ -389,7 +386,8 @@ class Details extends React.Component {
         return (api
             && (api.type === CONSTANTS.API_TYPES.WS
                 || api.type === CONSTANTS.API_TYPES.WEBSUB
-                || api.type === CONSTANTS.API_TYPES.SSE));
+                || api.type === CONSTANTS.API_TYPES.SSE
+                || api.type === CONSTANTS.API_TYPES.ASYNC));
     }
 
     /**
@@ -472,86 +470,82 @@ class Details extends React.Component {
                             to={pathPrefix + 'overview'}
                             open={open}
                         />
-                        {!api.advertiseInfo.advertised && (
+                        {user && showCredentials && (
                             <>
-                                {user && showCredentials && (
-                                    <>
 
-                                        <LeftMenuItem
-                                            text={(
-                                                <FormattedMessage
-                                                    id='Apis.Details.index.subscriptions'
-                                                    defaultMessage='Subscriptions'
-                                                />
-                                            )}
-                                            route='credentials'
-                                            iconText='credentials'
-                                            to={pathPrefix + 'credentials'}
-                                            open={open}
+                                <LeftMenuItem
+                                    text={(
+                                        <FormattedMessage
+                                            id='Apis.Details.index.subscriptions'
+                                            defaultMessage='Subscriptions'
                                         />
+                                    )}
+                                    route='credentials'
+                                    iconText='credentials'
+                                    to={pathPrefix + 'credentials'}
+                                    open={open}
+                                />
 
-                                    </>
-                                )}
-                                {showTryout && (api.gatewayVendor === 'wso2') && (
-                                    <LeftMenuItem
-                                        text={(
-                                            <FormattedMessage
-                                                id='Apis.Details.index.try.out'
-                                                defaultMessage='Try out'
-                                            />
-                                        )}
-                                        route='test'
-                                        iconText='test'
-                                        to={pathPrefix + 'test'}
-                                        open={open}
-                                    />
-
-                                )}
-                                {(showSolaceTopics && api.gatewayVendor === 'solace') && (
-                                    <LeftMenuItem
-                                        text={(
-                                            <FormattedMessage
-                                                id='Apis.Details.index.solaceTopicsInfo'
-                                                defaultMessage='Solace Info'
-                                            />
-                                        )}
-                                        route='solaceTopicsInfo'
-                                        iconText='test'
-                                        to={pathPrefix + 'solaceTopicsInfo'}
-                                        open={open}
-                                    />
-                                )}
-                                {isAsyncApi && showAsyncSpecification && (
-                                    <LeftMenuItem
-                                        text={(
-                                            <FormattedMessage
-                                                id='Apis.Details.index.definition'
-                                                defaultMessage='Definition'
-                                            />
-                                        )}
-                                        route='definition'
-                                        iconText='Definition'
-                                        to={pathPrefix + 'definition'}
-                                        open={open}
-                                    />
-                                )}
-                                {showComments && (
-
-                                    <LeftMenuItem
-                                        text={(
-                                            <FormattedMessage
-                                                id='Apis.Details.index.comments'
-                                                defaultMessage='Comments'
-                                            />
-                                        )}
-                                        route='comments'
-                                        iconText='comments'
-                                        to={pathPrefix + 'comments'}
-                                        open={open}
-                                    />
-
-                                )}
                             </>
+                        )}
+                        {showTryout && (api.gatewayVendor === 'wso2') && (
+                            <LeftMenuItem
+                                text={(
+                                    <FormattedMessage
+                                        id='Apis.Details.index.try.out'
+                                        defaultMessage='Try out'
+                                    />
+                                )}
+                                route='test'
+                                iconText='test'
+                                to={pathPrefix + 'test'}
+                                open={open}
+                            />
+
+                        )}
+                        {(showSolaceTopics && api.gatewayVendor === 'solace') && (
+                            <LeftMenuItem
+                                text={(
+                                    <FormattedMessage
+                                        id='Apis.Details.index.solaceTopicsInfo'
+                                        defaultMessage='Solace Info'
+                                    />
+                                )}
+                                route='solaceTopicsInfo'
+                                iconText='test'
+                                to={pathPrefix + 'solaceTopicsInfo'}
+                                open={open}
+                            />
+                        )}
+                        {isAsyncApi && showAsyncSpecification && (
+                            <LeftMenuItem
+                                text={(
+                                    <FormattedMessage
+                                        id='Apis.Details.index.definition'
+                                        defaultMessage='Definition'
+                                    />
+                                )}
+                                route='definition'
+                                iconText='Definition'
+                                to={pathPrefix + 'definition'}
+                                open={open}
+                            />
+                        )}
+                        {showComments && (
+
+                            <LeftMenuItem
+                                text={(
+                                    <FormattedMessage
+                                        id='Apis.Details.index.comments'
+                                        defaultMessage='Comments'
+                                    />
+                                )}
+                                route='comments'
+                                iconText='comments'
+                                to={pathPrefix + 'comments'}
+                                open={open}
+                            />
+
                         )}
                         {showDocuments && (
 
@@ -569,7 +563,7 @@ class Details extends React.Component {
                             />
 
                         )}
-                        {!api.advertiseInfo.advertised && !isAsyncApi && showSdks && (
+                        {!isAsyncApi && showSdks && (
 
                             <LeftMenuItem
                                 text={<FormattedMessage id='Apis.Details.index.sdk' defaultMessage='SDKs' />}

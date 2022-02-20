@@ -256,7 +256,6 @@ class Layout extends React.Component {
         }
     };
 
-
     handleRequestCloseUserMenu = () => {
         this.setState({ openUserMenu: false });
     };
@@ -281,7 +280,6 @@ class Layout extends React.Component {
             [key]: false,
         });
     };
-
 
     handleToggleUserMenu = () => {
         this.setState((state) => ({ openUserMenu: !state.openUserMenu }));
@@ -596,7 +594,7 @@ class Layout extends React.Component {
                                     {footerText && footerText !== '' ? <span>{footerText}</span> : (
                                         <FormattedMessage
                                             id='Base.index.copyright.text'
-                                            defaultMessage='WSO2 API-M v4.0.0 | © 2021 WSO2 Inc'
+                                            defaultMessage='WSO2 API-M v4.1.0 | © 2022 WSO2 Inc'
                                         />
                                     )}
                                 </Typography>
