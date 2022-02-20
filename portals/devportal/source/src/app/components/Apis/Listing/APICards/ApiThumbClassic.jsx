@@ -442,9 +442,9 @@ class ApiThumbClassic extends React.Component {
                                             color='primary'
                                         />
                                     )}
-                                    {(api.type === 'WEBSUB') && (
+                                    {(api.gatewayVendor === 'solace') && (
                                         <Chip
-                                            label={api.gatewayVendor}
+                                            label='SOLACE'
                                             color='primary'
                                         />
                                     )}
